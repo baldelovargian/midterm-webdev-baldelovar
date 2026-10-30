@@ -1,6 +1,6 @@
 # Royen's Lechon & Grill
 
-**Live site:** https://YOUR-GITHUB-USERNAME.github.io/Royen's-lechon-glassmorphism/
+**Live site:** https://baldelovargian.github.io/midterm-webdev-baldelovar/
 
 ## About
 
