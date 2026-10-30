@@ -1,6 +1,6 @@
 # Fuego Lechon & Grill
 
-**Live site:** https://YOUR-GITHUB-USERNAME.github.io/fuego-lechon-morphism/
+**Live site:** https://YOUR-GITHUB-USERNAME.github.io/Royen's-lechon-glassmorphism/
 
 ## About
 
@@ -13,7 +13,7 @@ ROYEN'S Lechon & Grill is a single-page culinary web portal built for a traditio
 | Role | Share | Color | Used for |
 |---|---|---|---|
 | Dominant | 60% | `black` | Page background (Dark Charcoal Mahogany) |
-| Secondary | 30% | `Warm Linen/Frosted Ivory` | Glassmorphic cards, surface panels, and navigation background |
+| Secondary | 30% | `white` | Glassmorphic cards, surface panels, and navigation background |
 | Accent | 10% | `orange` | CTA buttons, links, active badges, and scroll progress indicator |
 
 ### Visual style

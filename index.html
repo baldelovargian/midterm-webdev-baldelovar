@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royen's Lechon & Grill | Glassmorphism Culinary Experience</title>
+
+    <!-- Tailwind CSS CDN (v4) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Custom Tailwind Configuration & Glassmorphism Design Tokens -->
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+
+        /* Design System Tokens (60-30-10 Palette) */
+        @theme {
+            --color-brand-primary: #0f0b08;   
+            --color-brand-secondary: #fbf8f5; 
+            --color-brand-accent: #ff3300;    
+        }
+
+        @layer components {
+            .btn-action {
+                @apply inline-block px-6 py-3 font-mono font-bold text-sm uppercase tracking-wider text-white bg-[var(--color-brand-accent)] rounded-xl shadow-[0_4px_20px_rgba(255,51,0,0.35)] hover:shadow-[0_6px_25px_rgba(255,51,0,0.5)] transition-all duration-300 cursor-pointer;
+            }
+
+            .glass-card {
+                @apply p-8 rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] dark:bg-stone-900/60 dark:backdrop-blur-md dark:border-white/10 dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+            }
+
+            .input-field {
+                @apply w-full p-3.5 font-mono text-sm rounded-xl bg-stone-100/80 border border-stone-300 text-stone-900 focus:outline-none focus:border-[var(--color-brand-accent)] focus:ring-2 focus:ring-[var(--color-brand-accent)]/20 dark:bg-stone-950/50 dark:border-white/10 dark:text-stone-100 dark:focus:border-[var(--color-brand-accent)];
+            }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+</head>
+
+<body class="bg-[var(--color-brand-secondary)] text-stone-900 font-sans antialiased min-h-screen flex flex-col dark:bg-[var(--color-brand-primary)] dark:text-stone-100 transition-colors duration-300">
+
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1.5 w-full bg-[var(--color-brand-accent)] z-50 origin-left"></div>
+
+    <header class="sticky top-0 z-40 bg-white/60 backdrop-blur-md border-b border-white/20 dark:bg-stone-950/60 dark:border-white/10">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="animate-bounce relative shrink-0">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNBp1h1yZSpQHzVMKN_k2UjUlhvgdOV_FDxbuCuj7HHg&s=10" 
+                             alt="Royen - Master Pitmaster" 
+                             class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-[var(--color-brand-accent)] shadow-[0_0_12px_rgba(255,51,0,0.35)] group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-stone-950 rounded-full" title="Status: Pit Active"></span>
+                    </div>
+                    <span class="font-mono text-2xl font-black uppercase tracking-tight text-stone-900 dark:text-white">
+                        Royen's<span class="text-[var(--color-brand-accent)]">.Grill</span>
+                    </span>
+                </a>
+                
+                <button id="theme-toggle" aria-label="Toggle dark mode" class="md:hidden px-3 py-1.5 text-xs font-mono rounded-lg bg-stone-200/80 dark:bg-stone-800/80 border border-stone-300 dark:border-white/10">
+                    Mode
+                </button>
+            </div>
+
+            <nav class="flex items-center gap-6 font-mono text-sm font-bold uppercase">
+                <ul class="flex items-center gap-6 list-none m-0 p-0">
+                    <li><a href="#about" class="hover:text-[var(--color-brand-accent)] transition-colors">Our Process</a></li>
+                    <li><a href="#work" class="hover:text-[var(--color-brand-accent)] transition-colors">Specialties</a></li>
+                    <li><a href="#kusina" class="hover:text-[var(--color-brand-accent)] transition-colors">Our Kusina</a></li>
+                    <li><a href="#contact" class="hover:text-[var(--color-brand-accent)] transition-colors">Reserve Order</a></li>
+                </ul>
+
+                <button id="theme-toggle-desktop" aria-label="Toggle theme mode" class="hidden md:inline-block px-3.5 py-1.5 text-xs font-mono uppercase rounded-lg bg-stone-200/80 hover:bg-[var(--color-brand-accent)] hover:text-white dark:bg-stone-800/80 dark:hover:bg-[var(--color-brand-accent)] transition-all cursor-pointer">
+                    Toggle Mode
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="grow">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="max-w-6xl mx-auto px-6 py-12 md:py-20 text-left">
+            <div class="glass-card flex flex-col lg:flex-row items-center justify-between gap-10">
+                <div class="max-w-xl">
+                    <span class="intro-elem inline-block px-3 py-1 mb-4 text-xs font-mono font-bold uppercase bg-amber-500/10 text-[var(--color-brand-accent)] border border-[var(--color-brand-accent)]/20 rounded-full">
+                        Charcoal Pit // Fire Active
+                    </span>
+                    <h1 class="intro-elem font-mono text-4xl sm:text-6xl font-black uppercase leading-none tracking-tight mb-6">
+                        Royen's Lechon 
+                    </h1>
+                    <p class="intro-elem text-lg sm:text-xl font-medium text-stone-700 dark:text-stone-300 mb-8">
+                        Crispy golden skin, mahogany smoke infusion, and authentic slow-roasted lechon prepared daily over open charcoal embers.
+                    </p>
+                    <div class="intro-elem flex flex-wrap items-center gap-4">
+                        <a href="#contact" class="btn-action">Reserve Your Meal</a>
+                        <button id="replay-btn" class="px-6 py-3 font-mono font-bold text-sm uppercase bg-stone-200/80 text-stone-900 rounded-xl hover:bg-stone-300 dark:bg-stone-800/80 dark:text-white dark:hover:bg-stone-700 transition-all cursor-pointer">
+                            Replay Intro
+                        </button>
+                    </div>
+                </div>
+
+                <div class="intro-elem w-full lg:w-1/2 relative">
+                    <div class="relative rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-stone-900/40">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVK7RCuFnhkNdS6QkTo1mJkqfO8kqNnoxtf0x4M6X9UA&s=10" 
+                             alt="Royen's Crispy Roasted Lechon" 
+                             class="w-full h-72 sm:h-96 object-cover hover:scale-105 transition-transform duration-500">
+                        <div class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-stone-950/60 backdrop-blur-md border border-white/10 text-white font-mono text-xs flex justify-between items-center">
+                            <span>🔥 Freshly Roasted Daily</span>
+                            <span class="text-[var(--color-brand-accent)] font-bold">100% Crisp Guarantee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="reveal max-w-6xl mx-auto px-6 py-16 text-left">
+            <div class="border-b border-stone-300 dark:border-white/10 pb-3 mb-8">
+                <h2 class="font-mono text-3xl font-black uppercase">Our Roasting Heritage</h2>
+                <p class="font-mono text-xs text-stone-500 dark:text-stone-400">TRADITIONAL SLOW-SMOKED SPECIFICATIONS</p>
+            </div>
+
+            <div class="glass-card flex flex-col lg:flex-row items-center gap-8">
+                <div class="flex-1">
+                    <p class="text-base sm:text-lg leading-relaxed text-stone-700 dark:text-stone-300 mb-6">
+                        Infused with native lemongrass, crushed garlic, and farm-fresh wild herbs, every roll is hand-turned over glowing mahogany charcoal for over five hours. We preserve centuries-old Filipino roasting traditions to deliver crackling, golden-crisp skin and juicy, deeply seasoned meat—with zero artificial tenderizers.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-stone-200 dark:border-white/10 font-mono text-xs">
+                        <div class="p-3 rounded-xl bg-stone-100/80 dark:bg-stone-950/40 border border-stone-200 dark:border-white/5">
+                            <span class="block text-[var(--color-brand-accent)] font-bold mb-0.5">FUEL SOURCE</span>
+                            <span class="text-stone-600 dark:text-stone-400">Hardwood Charcoal</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-stone-100/80 dark:bg-stone-950/40 border border-stone-200 dark:border-white/5">
+                            <span class="block text-[var(--color-brand-accent)] font-bold mb-0.5">SLOW ROAST</span>
+                            <span class="text-stone-600 dark:text-stone-400">5+ Hours Flame</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-stone-100/80 dark:bg-stone-950/40 border border-stone-200 dark:border-white/5">
+                            <span class="block text-[var(--color-brand-accent)] font-bold mb-0.5">PURITY</span>
+                            <span class="text-stone-600 dark:text-stone-400">0% Tenderizers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-80 shrink-0 relative rounded-xl overflow-hidden border border-white/20 shadow-lg">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1yNu91192GfGcucHp1xDODtfZ3e23XiPa5zMRDyhNkQ&s=10" 
+                         alt="Traditional Charcoal Roasting Pit" 
+                         class="w-full h-64 lg:h-72 object-cover hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-3 left-3 right-3 p-2.5 rounded-lg bg-stone-950/70 backdrop-blur-md border border-white/10 text-white font-mono text-[11px] flex justify-between items-center">
+                        <span>🔥 Charcoal Pitmaster</span>
+                        <span class="text-[var(--color-brand-accent)] font-bold">Native Herbs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SPECIALTIES SECTION -->
+        <section id="work" class="reveal max-w-6xl mx-auto px-6 py-16 text-left">
+            <div class="border-b border-stone-300 dark:border-white/10 pb-3 mb-8">
+                <h2 class="font-mono text-3xl font-black uppercase">House Specialties</h2>
+                <p class="font-mono text-xs text-stone-500 dark:text-stone-400">DAILY PITMASTER CUTS</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <article class="glass-card md:col-span-2 flex flex-col md:flex-row justify-between gap-6">
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="font-mono text-xs px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg font-bold uppercase mb-3 inline-block border border-amber-500/20">
+                                Signature Dish
+                            </span>
+                            <h3 class="font-mono text-2xl font-bold mb-3">Traditional Whole Lechon</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                                Crispy skin, juicy native pork, and secret house spice blends slow-roasted over real charcoal embers. Designed for feasts, corporate gatherings, and large family celebrations.
+                            </p>
+                        </div>
+                        <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                            <li><strong>ROAST TIME:</strong> 5.5 Hours Slow-Flame</li>
+                            <li><strong>SERVES:</strong> 25-30 Guests</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="w-full md:w-48 h-48 md:h-auto shrink-0 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScORN2WJ3AUiTpIbn86Aiy7mvNGQVdP7zYIaTC4gYCUg&s=10" 
+                             alt="Traditional Whole Lechon" 
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT33Exb29zreO9WygbfcXCj_uKP3nsxiiNQGIq7oJGC2g&s=10" 
+                                 alt="Spicy Lechon Belly Roll" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Crispy Roll
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-red-500/10 text-red-600 dark:text-red-400 rounded-lg font-bold uppercase mb-3 inline-block border border-red-500/20">
+                            Boneless Specialty
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Spicy Lechon Belly Roll</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Stuffed with wild chili, crushed garlic, and scallions, tied tightly into a boneless crispy cylinder.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>PORTIONS:</strong> 1kg / 2kg Rolls</li>
+                        <li><strong>SPICE LEVEL:</strong> High</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGASJSm0jyojZ9_Lg9QukntOL225W2XR8BuxhZL9BLXQ&s=10" 
+                                 alt="Grilled Liempo and Inasal" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Grilled Liempo & Inasal</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYECB9TgFWQZ9PvfJpPJmrPG5DboQQPAd2d5yum_YGg&s=10" 
+                                 alt="Grilled Bangus" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Grilled Bangus</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjBcTuYVQtlOEYIqCNgJgKKmuWBO8E9bbpbWu3RZjz5A&s=10" 
+                                 alt="Grilled Chicken" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Grilled Chicken</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU482SRPbQASDHEOtq9HE1u1S_EsoRmBrMF_vVCE6BOg&s=10" 
+                                 alt="Grilled Giant Squid" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Grilled Giant Squid</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB2nINsAy17CCLqmPbQJLOzPANIEixZSTSrMsIUTbJAA&s=10" 
+                                 alt="BBQ Chicken" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">BBQ Chicken</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+                <article class="glass-card flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4oqh_cVaXesDCtcAQ3X-Vk0BTSKj-KnZWlmBQD-ksZQ&s=10" 
+                                 alt="Grilled Steak" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2 right-2 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-950/70 text-white backdrop-blur-sm border border-white/10">
+                                Open Flame
+                            </span>
+                        </div>
+
+                        <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-3 inline-block border border-orange-500/20">
+                            Charcoal Grill
+                        </span>
+                        <h3 class="font-mono text-xl font-bold mb-3">Grilled Steak</h3>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                            Marinated overnight in annatto oil, local calamansi, and coconut vinegar before open-flame searing.
+                        </p>
+                    </div>
+                    <ul class="font-mono text-xs text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                        <li><strong>SIDES:</strong> Garlic Rice & Atchara</li>
+                        <li><strong>PREP:</strong> Made to Order</li>
+                    </ul>
+                </article>
+
+            </div>
+        </section>
+
+      <!-- KUSINA & SANITATION SECTION -->
+<section id="kusina" class="reveal max-w-6xl mx-auto px-6 py-16 text-left">
+    <div class="border-b border-stone-300 dark:border-white/10 pb-3 mb-8">
+        <h2 class="font-mono text-3xl font-black uppercase">Our Kitchen & Grilling Spaces</h2>
+        <p class="font-mono text-xs text-stone-500 dark:text-stone-400">SANITATION & OPEN-FLAME ROASTING FACILITY</p>
+    </div>
+
+    <!-- Main Overview Card -->
+    <div class="glass-card flex flex-col lg:flex-row items-center gap-8 mb-8">
+        <div class="flex-1">
+            <span class="font-mono text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg font-bold uppercase mb-3 inline-block border border-emerald-500/20">
+                Food Safety & Standards
+            </span>
+            <h3 class="font-mono text-2xl font-bold mb-4">Spotless Culinary Facilities</h3>
+            <p class="text-sm sm:text-base text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                We maintain strict food safety standards in our preparation area. From food-grade stainless-steel prep tables to sanitized bamboo and stainless spits, every step of our lechon stuffing, marinating, and charcoal roasting is performed in a clean, ventilated, and highly hygienic environment.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+                <div class="p-3 rounded-xl bg-stone-100/80 dark:bg-stone-950/40 border border-stone-200 dark:border-white/5 flex items-center gap-3">
+                    <span class="text-xl">🧼</span>
+                    <div>
+                        <strong class="block text-stone-900 dark:text-white">Daily Deep Sanitation</strong>
+                        <span class="text-stone-500 dark:text-stone-400">Sanitized before & after every batch</span>
+                    </div>
+                </div>
+                <div class="p-3 rounded-xl bg-stone-100/80 dark:bg-stone-950/40 border border-stone-200 dark:border-white/5 flex items-center gap-3">
+                    <span class="text-xl">💨</span>
+                    <div>
+                        <strong class="block text-stone-900 dark:text-white">Ventilated Pit System</strong>
+                        <span class="text-stone-500 dark:text-stone-400">Controlled smoke & open-air airflow</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dual Kitchen Showcase (Prep Area + Grilling Pit) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Kitchen Space 1: Prep Area -->
+        <div class="glass-card !p-5 flex flex-col justify-between">
+            <div class="w-full h-56 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkOQCrFbVSFyd4lleww2fQpgY-wM9zLqcK1gYnbmhdjw&s=10" 
+                     alt="Clean Kitchen Preparation Area" 
+                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                <span class="absolute top-3 left-3 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-950/80 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 flex items-center gap-1.5 uppercase">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sanitized Zone
+                </span>
+            </div>
+            <div>
+                <span class="font-mono text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg font-bold uppercase mb-2 inline-block border border-emerald-500/20">
+                    Prep Kusina
+                </span>
+                <h4 class="font-mono text-xl font-bold mb-2">Stainless Preparation Area</h4>
+                <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mb-4">
+                    Where herbs are stuffed, bellies tied, and marinades applied using food-grade surfaces under strict temperature and cleanliness protocols.
+                </p>
+            </div>
+            <ul class="font-mono text-[11px] text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                <li><strong>SURFACES:</strong> 100% Stainless Steel</li>
+                <li><strong>PROTOCOL:</strong> UV & Hot Water Sanitized</li>
+            </ul>
+        </div>
+
+        <!-- Kitchen Space 2: Charcoal Grilling Pit -->
+        <div class="glass-card !p-5 flex flex-col justify-between">
+            <div class="w-full h-56 mb-4 relative rounded-xl overflow-hidden border border-white/20 shadow-md">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRchZ3qh3UYlDoenF-ULvI3_vGTEbHVdEU62Np0dntYOQ&s=10" 
+                     alt="Active Charcoal Grilling Pit" 
+                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                <span class="absolute top-3 left-3 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md bg-orange-950/80 text-orange-400 backdrop-blur-sm border border-orange-500/30 flex items-center gap-1.5 uppercase">
+                    <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span> Fire Active
+                </span>
+            </div>
+            <div>
+                <span class="font-mono text-xs px-2.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg font-bold uppercase mb-2 inline-block border border-orange-500/20">
+                    Roasting Kusina
+                </span>
+                <h4 class="font-mono text-xl font-bold mb-2">Open Charcoal Smoke Pit</h4>
+                <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mb-4">
+                    Our dedicated open-flame roasting rotisserie powered by natural coconut charcoal, generating even heat for that signature crackling skin.
+                </p>
+            </div>
+            <ul class="font-mono text-[11px] text-stone-500 dark:text-stone-400 space-y-1 border-t border-stone-200 dark:border-white/10 pt-3">
+                <li><strong>HEAT SOURCE:</strong> Native Coconut Charcoal</li>
+                <li><strong>CAPACITY:</strong> Rotisserie Multi-Spit</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="reveal max-w-6xl mx-auto px-6 py-16 text-left">
+            <div class="border-b border-stone-300 dark:border-white/10 pb-3 mb-8">
+                <h2 class="font-mono text-3xl font-black uppercase">Pre-Order & Inquiries</h2>
+                <p class="font-mono text-xs text-stone-500 dark:text-stone-400">TRANSMIT ORDER DETAILS FOR RESERVATION</p>
+            </div>
+
+            <div class="glass-card max-w-2xl">
+                <form action="#" method="POST" class="flex flex-col gap-6" onsubmit="event.preventDefault();">
+                    <div class="flex flex-col gap-2">
+                        <label for="client-name" class="font-mono text-xs font-bold uppercase tracking-wider">Customer Name</label>
+                        <input type="text" id="client-name" name="client-name" required placeholder="e.g. Maria Santos" class="input-field">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="client-email" class="font-mono text-xs font-bold uppercase tracking-wider">Contact Email</label>
+                        <input type="email" id="client-email" name="client-email" required placeholder="maria@domain.com" class="input-field">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="client-message" class="font-mono text-xs font-bold uppercase tracking-wider">Order Specifications</label>
+                        <textarea id="client-message" name="client-message" rows="4" required placeholder="Specify belly roll weight, delivery date, or party platter headcount..." class="input-field"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-action w-full">Submit Reservation Request</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-950 text-white border-t border-white/10 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs">
+            <p>© 2026 Royen's Lechon & Grill. All rights reserved.</p>
+            <p class="text-[var(--color-brand-accent)] font-bold">CHARCOAL PIT // MORPHISM DESIGN</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
